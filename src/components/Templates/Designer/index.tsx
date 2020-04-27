@@ -17,11 +17,13 @@ const Designer = () => {
     'loom-designer-saved-design',
     JSON.stringify(createGrid(DEFAULT_ROWS, DEFAULT_COLUMNS))
   );
+  const [savedPixelSize, setSavedPixelSize] = useLocalStorage('loom-designer-saved-pixel-size', JSON.stringify(20));
+
   let grid = JSON.parse(savedGrid);
   if (!savedGrid) {
     grid = createGrid(DEFAULT_ROWS, DEFAULT_COLUMNS);
   }
-
+  const [pixelSize, setPixelSize] = useState(savedPixelSize);
   const [chosenColor, setChosenColor] = useState('#000000');
   const [isDrawing, setIsDrawing] = useState(true);
   const [boardState, setBoardState] = useState(grid);
@@ -53,16 +55,24 @@ const Designer = () => {
     setSavedGrid(JSON.stringify(createGrid(rows, columns)));
   };
 
+  const onPixelSizeChangeHandler = (pixelSize: number) => {
+    setSavedPixelSize(JSON.stringify(pixelSize));
+    setPixelSize(pixelSize);
+  };
+
   return (
     <DesignerContainer>
-      <BoardContext.Provider value={{ board: boardState, updateBoard }}>
+      <BoardContext.Provider value={{ board: boardState, updateBoard, pixelSize }}>
         <ToolsContext.Provider value={{ isDrawing }}>
           <PatternContainer>
             {boardState.map((row, i) => (
-              <Row key={i} row={row} chosenColor={chosenColor} />
+              <>
+                <Row key={i} row={row} chosenColor={chosenColor} />
+              </>
             ))}
           </PatternContainer>
           <EditorTools
+            setPixelSize={onPixelSizeChangeHandler}
             createNewBoard={createNewBoardHandler}
             clearBoard={clearBoardHandler}
             setIsDrawing={setIsDrawing}
@@ -79,6 +89,11 @@ const Designer = () => {
 const DesignerContainer = styled.div`
   display: flex;
   background-color: #9b59b655;
+  @media print {
+     {
+      background-color: #fff;
+    }
+  }
 `;
 
 const PatternContainer = styled.div`

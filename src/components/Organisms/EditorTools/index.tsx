@@ -12,6 +12,7 @@ interface EditorToolsProps {
   setIsDrawing: Dispatch<SetStateAction<boolean>>;
   clearBoard: () => void;
   createNewBoard: (rows: number, columns: number) => void;
+  setPixelSize: (pixelSize: number) => void;
 }
 
 const EditorTools: React.FC<EditorToolsProps> = ({
@@ -21,6 +22,7 @@ const EditorTools: React.FC<EditorToolsProps> = ({
   setIsDrawing,
   clearBoard,
   createNewBoard,
+  setPixelSize,
 }) => {
   const [savedColorPalette, setSavedColorPalette] = useLocalStorage(
     'loom-designer-saved-color-palette',
@@ -96,6 +98,17 @@ const EditorTools: React.FC<EditorToolsProps> = ({
           Clear board
         </ClearBoardButton>
 
+        <ClearBoardButton
+          onClick={() => {
+            const result = window.prompt('Please enter your pixel size', '20');
+            if (result) {
+              const pixelSize = Number(result);
+              setPixelSize(pixelSize);
+            }
+          }}
+        >
+          Set pixel size
+        </ClearBoardButton>
         <ClearBoardButton
           onClick={() => {
             const result = window.prompt('Please enter your grid size', '9,50');
