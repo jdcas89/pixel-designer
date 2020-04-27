@@ -54,10 +54,16 @@ const EditorTools: React.FC<EditorToolsProps> = ({
         presetColors={colorPalette}
         color={chosenColor}
         onChangeComplete={(color: ColorResult) => {
-          setColorPalette((prevState) => [...prevState, color.hex]);
           handleChangeColor(color);
         }}
       />
+      <ClearBoardButton
+        onClick={() => {
+          setColorPalette((prevState) => [...prevState, chosenColor]);
+        }}
+      >
+        Add color to palette
+      </ClearBoardButton>
       <ClearBoardButton
         onClick={() => {
           setSavedColorPalette(JSON.stringify(colorPalette));
@@ -126,11 +132,11 @@ const StyledIconAlt = styled(FontAwesomeIcon)`
 
 const EditorToolsContainer = styled.div`
   position: absolute;
-  top: 20%;
+  top: 0;
   right: 0;
   margin: 0;
   background-color: #ecf0f1;
-  height: 500px;
+  height: 100%;
   padding: 8px;
   border-bottom-left-radius: 12px;
   border-top-left-radius: 12px;
