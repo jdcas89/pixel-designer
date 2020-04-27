@@ -32,7 +32,7 @@ const Row: React.FC<{ row: RowType; chosenColor: string }> = ({ row, chosenColor
 
 const RowContainer = styled.div`
   display: flex;
-  grid-gap: 1px;
+  position: relative;
 `;
 
 export default Row;

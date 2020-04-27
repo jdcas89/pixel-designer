@@ -9,11 +9,14 @@ import { BoardContext } from '../../../contexts/BoardContext';
 import { createGrid } from '../../../utils/createGrid';
 import useLocalStorage from '../../../utils/useLocalStorage';
 
-const DEFAULT_ROWS = 50;
-const DEFAULT_COLUMNS = 9;
+const DEFAULT_ROWS = 9;
+const DEFAULT_COLUMNS = 50;
 
 const Designer = () => {
-  const [savedGrid, setSavedGrid] = useLocalStorage('loom-designer-saved-design', JSON.stringify(createGrid(30, 30)));
+  const [savedGrid, setSavedGrid] = useLocalStorage(
+    'loom-designer-saved-design',
+    JSON.stringify(createGrid(DEFAULT_ROWS, DEFAULT_COLUMNS))
+  );
   let grid = JSON.parse(savedGrid);
   if (!savedGrid) {
     grid = createGrid(DEFAULT_ROWS, DEFAULT_COLUMNS);
@@ -74,17 +77,19 @@ const Designer = () => {
 };
 
 const DesignerContainer = styled.div`
-  position: relative;
   display: flex;
-  width: 100%;
-  height: 100%;
+  background-color: #9b59b655;
 `;
 
 const PatternContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 8px;
-  margin: 0 auto;
+  display: grid;
+  padding: 16px;
+  width: 100%;
+  margin: auto;
+  position: relative;
+  overflow-x: scroll;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 `;
 
 export default Designer;
