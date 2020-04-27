@@ -1,8 +1,9 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { faCaretCircleRight, faCog, faEraser, faPen, faTint } from '@fortawesome/pro-solid-svg-icons';
-import { ColorChangeHandler, SketchPicker } from 'react-color';
+import { ColorChangeHandler, ColorResult, SketchPicker } from 'react-color';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import useLocalStorage from '../../../utils/useLocalStorage';
 
 interface EditorToolsProps {
   chosenColor: string;
@@ -21,6 +22,12 @@ const EditorTools: React.FC<EditorToolsProps> = ({
   clearBoard,
   createNewBoard,
 }) => {
+  const [savedColorPalette, setSavedColorPalette] = useLocalStorage(
+    'loom-designer-saved-color-palette',
+    JSON.stringify(['#000', '#fff'])
+  );
+
+  const [colorPalette, setColorPalette] = useState(JSON.parse(savedColorPalette));
   return (
     <EditorToolsContainer>
       <Tools>
@@ -43,7 +50,29 @@ const EditorTools: React.FC<EditorToolsProps> = ({
         <StyledIconAlt icon={faCaretCircleRight} />
       </Tools>
 
-      <SketchPicker color={chosenColor} onChangeComplete={handleChangeColor} />
+      <SketchPicker
+        presetColors={colorPalette}
+        color={chosenColor}
+        onChangeComplete={(color: ColorResult) => {
+          setColorPalette((prevState) => [...prevState, color.hex]);
+          handleChangeColor(color);
+        }}
+      />
+      <ClearBoardButton
+        onClick={() => {
+          setSavedColorPalette(JSON.stringify(colorPalette));
+        }}
+      >
+        Save color palette
+      </ClearBoardButton>
+      <ClearBoardButton
+        onClick={() => {
+          setColorPalette(['#000', '#fff']);
+          setSavedColorPalette(JSON.stringify(['#000', '#fff']));
+        }}
+      >
+        Clear color palette
+      </ClearBoardButton>
       <ClearBoardButton
         onClick={() => {
           const result = window.confirm('Do you really want to clear the board?');
