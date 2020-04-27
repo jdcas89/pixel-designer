@@ -50,7 +50,7 @@ const EditorTools: React.FC<EditorToolsProps> = ({
         <StyledIconAlt icon={faCaretCircleRight} />
       </Tools>
 
-      <SketchPicker
+      <StyledSketchPicker
         presetColors={colorPalette}
         color={chosenColor}
         onChangeComplete={(color: ColorResult) => {
@@ -100,6 +100,8 @@ const EditorTools: React.FC<EditorToolsProps> = ({
   );
 };
 
+const StyledSketchPicker = styled(SketchPicker)``;
+
 const ClearBoardButton = styled.button`
   margin: 8px auto;
   border: none;
@@ -134,6 +136,11 @@ const EditorToolsContainer = styled.div`
   border-top-left-radius: 12px;
   display: flex;
   flex-direction: column;
+  @media print {
+     {
+      display: none !important;
+    }
+  }
 `;
 
 export default EditorTools;
