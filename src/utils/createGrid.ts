@@ -7,7 +7,7 @@ export const createGrid: (rows: number, columns: number) => RowType[] = (rows, c
     const row: RowType = [];
 
     for (let j = 0; j < columns; j++) {
-      row.push({ x: i, y: j, checked: false });
+      row.push({ x: i, y: j, checked: false, color: '#fff' });
     }
     grid.push(row);
   }

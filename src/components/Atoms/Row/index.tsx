@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Pixel, RowType } from '../../../utils/grid-example';
 import { BoardContext } from '../../../contexts/BoardContext';
 
-const Row: React.FC<{ row: RowType; color: string }> = ({ row, color }) => {
+const Row: React.FC<{ row: RowType; chosenColor: string }> = ({ row, chosenColor }) => {
   const { updateBoard } = useContext(BoardContext);
   const sortPixels = (a: Pixel, b: Pixel) => {
     return a.x > b.x ? -1 : 1;
@@ -16,7 +16,8 @@ const Row: React.FC<{ row: RowType; color: string }> = ({ row, color }) => {
         <Box
           pixel={pixel}
           checked={pixel.checked}
-          color={pixel.color || color}
+          color={pixel.color}
+          chosenColor={chosenColor}
           onPixelClicked={(pixel) => {
             if (updateBoard) {
               updateBoard(pixel);

@@ -8,6 +8,7 @@ import { Pixel } from '../../../utils/grid-example';
 import { BoardContext } from '../../../contexts/BoardContext';
 import { createGrid } from '../../../utils/createGrid';
 import useLocalStorage from '../../../utils/useLocalStorage';
+import { desktop } from '../../../styling/theme';
 
 const DEFAULT_ROWS = 50;
 const DEFAULT_COLUMNS = 9;
@@ -56,7 +57,7 @@ const Designer = () => {
         <ToolsContext.Provider value={{ isDrawing }}>
           <PatternContainer>
             {boardState.map((row, i) => (
-              <Row key={i} row={row} color={chosenColor} />
+              <Row key={i} row={row} chosenColor={chosenColor} />
             ))}
           </PatternContainer>
           <EditorTools
@@ -77,7 +78,7 @@ const DesignerContainer = styled.div`
   position: relative;
   display: flex;
   width: 100%;
-  height: 100vh;
+  height: 100%;
 `;
 
 const PatternContainer = styled.div`

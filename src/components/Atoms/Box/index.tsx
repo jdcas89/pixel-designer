@@ -1,28 +1,34 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ToolsContext } from '../../../contexts/ToolsContext';
 import { Pixel } from '../../../utils/grid-example';
 
 interface BoxProps {
   onPixelClicked: (pixel: Pixel) => void;
-  color: string;
+  color?: string;
+  chosenColor: string;
   checked: boolean;
   pixel: Pixel;
 }
 
-const Box: React.FC<BoxProps> = ({ onPixelClicked, color, checked, pixel }) => {
+const Box: React.FC<BoxProps> = ({ onPixelClicked, pixel, chosenColor }) => {
   const { isDrawing } = useContext(ToolsContext);
   const [checkedState, setCheckedState] = useState(pixel.checked);
-  const [colorState, setColorState] = useState(color);
+  const [colorState, setColorState] = useState(pixel.color);
+
+  useEffect(() => {
+    setCheckedState(pixel.checked);
+    setColorState(pixel.color);
+  }, [pixel]);
 
   const onPixelClickedHandler = () => {
     if (isDrawing) {
-      setColorState(color);
+      setColorState(chosenColor);
       setCheckedState(true);
       onPixelClicked({
         ...pixel,
         checked: true,
-        color: color,
+        color: chosenColor,
       });
     } else {
       setColorState('#fff');
@@ -52,7 +58,7 @@ const Box: React.FC<BoxProps> = ({ onPixelClicked, color, checked, pixel }) => {
   );
 };
 
-const BoxContainer = styled.div<{ checked: boolean; color: string }>`
+const BoxContainer = styled.div<{ checked: boolean; color?: string }>`
   height: 20px;
   width: 20px;
   border: 1px solid black;
