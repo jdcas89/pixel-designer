@@ -4,10 +4,11 @@ import { ColorResult } from 'react-color';
 import Row from '../../Atoms/Row';
 import EditorTools from '../../Organisms/EditorTools';
 import { ToolsContext } from '../../../contexts/ToolsContext';
-import { Pixel } from '../../../utils/grid-example';
+import { Pixel, RowType } from '../../../utils/grid-example';
 import { BoardContext } from '../../../contexts/BoardContext';
 import { createGrid } from '../../../utils/createGrid';
 import useLocalStorage from '../../../utils/useLocalStorage';
+import { getNumberRow } from '../../../utils/getNumberRow';
 
 const DEFAULT_ROWS = 9;
 const DEFAULT_COLUMNS = 50;
@@ -26,7 +27,7 @@ const Designer = () => {
   const [pixelSize, setPixelSize] = useState(savedPixelSize);
   const [chosenColor, setChosenColor] = useState('#000000');
   const [isDrawing, setIsDrawing] = useState(true);
-  const [boardState, setBoardState] = useState(grid);
+  const [boardState, setBoardState] = useState<RowType[]>(grid);
 
   const clearBoardHandler = () => {
     setBoardState(createGrid(DEFAULT_ROWS, DEFAULT_COLUMNS));
@@ -67,6 +68,7 @@ const Designer = () => {
           <PatternContainer>
             {boardState.map((row, i) => (
               <>
+                {/*{i === 0 && <Row isNumberRow key={i} row={getNumberRow(row)} chosenColor={'white'} />}*/}
                 <Row key={i} row={row} chosenColor={chosenColor} />
               </>
             ))}
