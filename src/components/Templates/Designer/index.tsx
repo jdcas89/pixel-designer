@@ -8,7 +8,6 @@ import { Pixel } from '../../../utils/grid-example';
 import { BoardContext } from '../../../contexts/BoardContext';
 import { createGrid } from '../../../utils/createGrid';
 import useLocalStorage from '../../../utils/useLocalStorage';
-import { desktop } from '../../../styling/theme';
 
 const DEFAULT_ROWS = 50;
 const DEFAULT_COLUMNS = 9;

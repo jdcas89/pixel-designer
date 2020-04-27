@@ -3,7 +3,6 @@ import { faCaretCircleRight, faCog, faEraser, faPen, faTint } from '@fortawesome
 import { ColorChangeHandler, SketchPicker } from 'react-color';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import useLocalStorage from '../../../utils/useLocalStorage';
 
 interface EditorToolsProps {
   chosenColor: string;
