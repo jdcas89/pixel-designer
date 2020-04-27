@@ -1,0 +1,55 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": ["react", "@typescript-eslint", "fp", "react-hooks", "prettier"],
+  "env": {
+    "browser": true,
+    "jasmine": true,
+    "jest": true,
+    "node": true,
+    "es6": true
+  },
+  "rules": {
+    "max-lines": ["warn", 200],
+    "max-lines-per-function": ["warn", 100],
+    "complexity": ["warn", 7],
+    "max-nested-callbacks": ["warn", 3],
+    "max-depth": ["warn", 3],
+    "no-console": "warn",
+    "no-dupe-keys": "warn",
+    "no-else-return": 2,
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true
+      }
+    ],
+    "react/prop-types": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-member-accessibility": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/ban-ts-ignore": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
+  },
+  "settings": {
+    "react": {
+      "pragma": "React",
+      "version": "detect"
+    }
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  }
+}
