@@ -1,15 +1,18 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import { faCaretCircleRight, faCog, faEraser, faPen, faTint } from '@fortawesome/pro-solid-svg-icons';
+import { faCaretCircleRight, faEraser, faPen } from '@fortawesome/pro-solid-svg-icons';
 import { ColorChangeHandler, ColorResult, SketchPicker } from 'react-color';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useLocalStorage from '../../../utils/useLocalStorage';
+import { faEyeDropper } from '@fortawesome/pro-light-svg-icons';
+
+export type ToolType = 'eraser' | 'pen' | 'eyedropper';
 
 interface EditorToolsProps {
   chosenColor: string;
   handleChangeColor: ColorChangeHandler;
-  isDrawing: boolean;
-  setIsDrawing: Dispatch<SetStateAction<boolean>>;
+  currentTool: ToolType;
+  setCurrentTool: Dispatch<SetStateAction<ToolType>>;
   clearBoard: () => void;
   createNewBoard: (rows: number, columns: number) => void;
   setPixelSize: (pixelSize: number) => void;
@@ -18,11 +21,11 @@ interface EditorToolsProps {
 const EditorTools: React.FC<EditorToolsProps> = ({
   handleChangeColor,
   chosenColor,
-  isDrawing,
-  setIsDrawing,
+  currentTool,
   clearBoard,
   createNewBoard,
   setPixelSize,
+  setCurrentTool,
 }) => {
   const [savedColorPalette, setSavedColorPalette] = useLocalStorage(
     'loom-designer-saved-color-palette',
@@ -34,21 +37,26 @@ const EditorTools: React.FC<EditorToolsProps> = ({
     <EditorToolsContainer>
       <Tools>
         <StyledIcon
-          isDrawing={isDrawing}
+          active={currentTool === 'pen'}
           icon={faPen}
           onClick={() => {
-            setIsDrawing(true);
+            setCurrentTool('pen');
           }}
         />
         <StyledIcon
-          isDrawing={!isDrawing}
+          active={currentTool === 'eraser'}
           icon={faEraser}
           onClick={() => {
-            setIsDrawing(false);
+            setCurrentTool('eraser');
           }}
         />
-        <StyledIconAlt icon={faTint} />
-        <StyledIconAlt icon={faCog} />
+        <StyledIcon
+          active={currentTool === 'eyedropper'}
+          onClick={() => {
+            setCurrentTool('eyedropper');
+          }}
+          icon={faEyeDropper}
+        />
         <StyledIconAlt icon={faCaretCircleRight} />
       </Tools>
 
@@ -66,14 +74,14 @@ const EditorTools: React.FC<EditorToolsProps> = ({
             setColorPalette((prevState) => [...prevState, chosenColor]);
           }}
         >
-          Add color to palette
+          Save color
         </ClearBoardButton>
         <ClearBoardButton
           onClick={() => {
             setSavedColorPalette(JSON.stringify(colorPalette));
           }}
         >
-          Save color palette
+          Save palette
         </ClearBoardButton>
         <ClearBoardButton
           onClick={() => {
@@ -81,7 +89,7 @@ const EditorTools: React.FC<EditorToolsProps> = ({
             setSavedColorPalette(JSON.stringify(['#000', '#fff']));
           }}
         >
-          Clear color palette
+          Clear palette
         </ClearBoardButton>
       </ButtonsContainer>
 
@@ -107,7 +115,7 @@ const EditorTools: React.FC<EditorToolsProps> = ({
             }
           }}
         >
-          Set pixel size
+          Pixel Size
         </ClearBoardButton>
         <ClearBoardButton
           onClick={() => {
@@ -119,12 +127,19 @@ const EditorTools: React.FC<EditorToolsProps> = ({
             }
           }}
         >
-          Set grid size
+          Grid size
         </ClearBoardButton>
       </ButtonsContainer>
+      <Version>Version 0.1.0</Version>
     </EditorToolsContainer>
   );
 };
+
+const Version = styled.p`
+  margin: 32px 0;
+  align-self: flex-end;
+  font-size: 12px;
+`;
 
 const Text = styled.p`
   padding: 8px;
@@ -151,14 +166,15 @@ const ClearBoardButton = styled.button`
   background-color: #3498db;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   cursor: pointer;
+  font-size: 14px;
 `;
 
 const Tools = styled.div`
   display: flex;
 `;
 
-const StyledIcon = styled(FontAwesomeIcon)<{ isDrawing: boolean }>`
-  color: ${({ isDrawing }) => (isDrawing ? '#3498db' : 'black')};
+const StyledIcon = styled(FontAwesomeIcon)<{ active: boolean }>`
+  color: ${({ active }) => (active ? '#3498db' : 'black')};
   margin: 8px;
 `;
 
@@ -173,10 +189,7 @@ const EditorToolsContainer = styled.div`
   right: 0;
   background-color: #ecf0f1;
   height: 100vh;
-  padding: 8px;
-  //margin: 0 16px;
-  border-bottom-left-radius: 12px;
-  border-top-left-radius: 12px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   @media print {

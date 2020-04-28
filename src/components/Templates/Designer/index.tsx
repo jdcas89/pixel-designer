@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { ColorResult } from 'react-color';
 import Row from '../../Atoms/Row';
-import EditorTools from '../../Organisms/EditorTools';
+import EditorTools, { ToolType } from '../../Organisms/EditorTools';
 import { ToolsContext } from '../../../contexts/ToolsContext';
 import { Pixel, RowType } from '../../../utils/grid-example';
 import { BoardContext } from '../../../contexts/BoardContext';
 import { createGrid } from '../../../utils/createGrid';
 import useLocalStorage from '../../../utils/useLocalStorage';
-import { getNumberRow } from '../../../utils/getNumberRow';
+import NumberRow from '../../Atoms/NumberRow';
 
 const DEFAULT_ROWS = 9;
 const DEFAULT_COLUMNS = 50;
@@ -18,15 +18,18 @@ const Designer = () => {
     'loom-designer-saved-design',
     JSON.stringify(createGrid(DEFAULT_ROWS, DEFAULT_COLUMNS))
   );
+
   const [savedPixelSize, setSavedPixelSize] = useLocalStorage('loom-designer-saved-pixel-size', JSON.stringify(20));
 
   let grid = JSON.parse(savedGrid);
+
   if (!savedGrid) {
     grid = createGrid(DEFAULT_ROWS, DEFAULT_COLUMNS);
   }
+
   const [pixelSize, setPixelSize] = useState(savedPixelSize);
   const [chosenColor, setChosenColor] = useState('#000000');
-  const [isDrawing, setIsDrawing] = useState(true);
+  const [currentTool, setCurrentTool] = useState<ToolType>('pen');
   const [boardState, setBoardState] = useState<RowType[]>(grid);
 
   const clearBoardHandler = () => {
@@ -56,29 +59,29 @@ const Designer = () => {
     setSavedGrid(JSON.stringify(createGrid(rows, columns)));
   };
 
-  const onPixelSizeChangeHandler = (pixelSize: number) => {
-    setSavedPixelSize(JSON.stringify(pixelSize));
-    setPixelSize(pixelSize);
+  const onPixelSizeChangeHandler = (pS: number) => {
+    setSavedPixelSize(JSON.stringify(pS));
+    setPixelSize(pS);
   };
 
   return (
     <DesignerContainer>
       <BoardContext.Provider value={{ board: boardState, updateBoard, pixelSize }}>
-        <ToolsContext.Provider value={{ isDrawing }}>
+        <ToolsContext.Provider value={{ currentTool, setCurrentColor: setChosenColor }}>
           <PatternContainer>
             {boardState.map((row, i) => (
               <>
-                {/*{i === 0 && <Row isNumberRow key={i} row={getNumberRow(row)} chosenColor={'white'} />}*/}
+                {i === 0 && <NumberRow row={row} />}
                 <Row key={i} row={row} chosenColor={chosenColor} />
               </>
             ))}
           </PatternContainer>
           <EditorTools
+            currentTool={currentTool}
+            setCurrentTool={setCurrentTool}
             setPixelSize={onPixelSizeChangeHandler}
             createNewBoard={createNewBoardHandler}
             clearBoard={clearBoardHandler}
-            setIsDrawing={setIsDrawing}
-            isDrawing={isDrawing}
             handleChangeColor={handleChangeColor}
             chosenColor={chosenColor}
           />
@@ -100,12 +103,13 @@ const DesignerContainer = styled.div`
 
 const PatternContainer = styled.div`
   display: grid;
-  padding: 16px;
+  grid-gap: 0;
+  padding: 48px 16px;
   width: 100%;
   margin: auto;
   position: relative;
-  overflow-x: scroll;
-  overflow-y: scroll;
+  overflow-x: auto;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 `;
 

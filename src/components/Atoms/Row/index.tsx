@@ -4,21 +4,17 @@ import styled from 'styled-components';
 import { Pixel, RowType } from '../../../utils/grid-example';
 import { BoardContext } from '../../../contexts/BoardContext';
 
-const Row: React.FC<{ row: RowType; chosenColor: string; isNumberRow?: boolean }> = ({
-  row,
-  chosenColor,
-  isNumberRow,
-}) => {
+const Row: React.FC<{ row: RowType; chosenColor: string }> = ({ row, chosenColor }) => {
   const { updateBoard, pixelSize } = useContext(BoardContext);
   const sortPixels = (a: Pixel, b: Pixel) => {
-    return a.x > b.x ? -1 : 1;
+    return a.x < b.x ? -1 : 1;
   };
 
   return (
-    <RowContainer>
+    <RowContainer pixelSize={pixelSize}>
       {row.sort(sortPixels).map((pixel, i) => (
         <CenteredContainer key={i}>
-          {i === 0 && <StyledSpan>{pixel.y}</StyledSpan>}
+          {i === 0 && <StyledSpan pixelSize={pixelSize}>{pixel.y}</StyledSpan>}
           <Box
             pixelSize={pixelSize}
             pixel={pixel}
@@ -30,20 +26,22 @@ const Row: React.FC<{ row: RowType; chosenColor: string; isNumberRow?: boolean }
                 updateBoard(pixel);
               }
             }}
-            key={i}
-          >
-            {isNumberRow && pixel.x}
-          </Box>
+            key={pixel.x + pixel.y}
+          />
         </CenteredContainer>
       ))}
     </RowContainer>
   );
 };
 
-const StyledSpan = styled.span`
-  text-align: right;
+const StyledSpan = styled.span<{ pixelSize: number }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 0 2px;
-  width: 20px;
+  width: ${({ pixelSize }) => pixelSize}px;
+  user-select: none;
+  font-size: 14px;
 `;
 
 const CenteredContainer = styled.div`
@@ -52,9 +50,11 @@ const CenteredContainer = styled.div`
   justify-content: center;
 `;
 
-const RowContainer = styled.div`
+const RowContainer = styled.div<{ pixelSize: number }>`
   display: flex;
   position: relative;
+  margin: 0.5px;
+  height: ${({ pixelSize }) => pixelSize}px;
 `;
 
 export default Row;
