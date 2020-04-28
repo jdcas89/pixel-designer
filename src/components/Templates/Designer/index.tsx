@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import styled from 'styled-components';
 import { ColorResult } from 'react-color';
 import Row from '../../Atoms/Row';
@@ -70,10 +70,10 @@ const Designer = () => {
         <ToolsContext.Provider value={{ currentTool, setCurrentColor: setChosenColor }}>
           <PatternContainer>
             {boardState.map((row, i) => (
-              <>
+              <Fragment key={i}>
                 {i === 0 && <NumberRow row={row} />}
                 <Row key={i} row={row} chosenColor={chosenColor} />
-              </>
+              </Fragment>
             ))}
           </PatternContainer>
           <EditorTools

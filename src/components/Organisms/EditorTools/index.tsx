@@ -8,6 +8,10 @@ import { faEyeDropper } from '@fortawesome/pro-light-svg-icons';
 
 export type ToolType = 'eraser' | 'pen' | 'eyedropper';
 
+const getColor = (activeTool: string, tool: string) => {
+  return tool === activeTool ? '#3498db' : 'black';
+};
+
 interface EditorToolsProps {
   chosenColor: string;
   handleChangeColor: ColorChangeHandler;
@@ -37,21 +41,21 @@ const EditorTools: React.FC<EditorToolsProps> = ({
     <EditorToolsContainer>
       <Tools>
         <StyledIcon
-          active={currentTool === 'pen'}
+          color={getColor(currentTool, 'pen')}
           icon={faPen}
           onClick={() => {
             setCurrentTool('pen');
           }}
         />
         <StyledIcon
-          active={currentTool === 'eraser'}
+          color={getColor(currentTool, 'eraser')}
           icon={faEraser}
           onClick={() => {
             setCurrentTool('eraser');
           }}
         />
         <StyledIcon
-          active={currentTool === 'eyedropper'}
+          color={getColor(currentTool, 'eyedropper')}
           onClick={() => {
             setCurrentTool('eyedropper');
           }}
@@ -173,8 +177,7 @@ const Tools = styled.div`
   display: flex;
 `;
 
-const StyledIcon = styled(FontAwesomeIcon)<{ active: boolean }>`
-  color: ${({ active }) => (active ? '#3498db' : 'black')};
+const StyledIcon = styled(FontAwesomeIcon)`
   margin: 8px;
 `;
 
