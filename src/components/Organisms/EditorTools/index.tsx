@@ -20,6 +20,8 @@ interface EditorToolsProps {
   clearBoard: () => void;
   createNewBoard: (rows: number, columns: number) => void;
   setPixelSize: (pixelSize: number) => void;
+  setBoardPattern: (boardPattern: string) => void;
+  boardPattern: string;
 }
 
 const EditorTools: React.FC<EditorToolsProps> = ({
@@ -30,6 +32,8 @@ const EditorTools: React.FC<EditorToolsProps> = ({
   createNewBoard,
   setPixelSize,
   setCurrentTool,
+  setBoardPattern,
+  boardPattern,
 }) => {
   const [savedColorPalette, setSavedColorPalette] = useLocalStorage(
     'loom-designer-saved-color-palette',
@@ -134,6 +138,15 @@ const EditorTools: React.FC<EditorToolsProps> = ({
           Grid size
         </ClearBoardButton>
       </ButtonsContainer>
+
+      <Text>Board Pattern</Text>
+      <ClearBoardButton
+        onClick={() => {
+          setBoardPattern(boardPattern === 'square' ? 'peyote' : 'square');
+        }}
+      >
+        {boardPattern === 'square' ? 'Peyote' : 'Square'}
+      </ClearBoardButton>
       <Version>Version 0.1.0</Version>
     </EditorToolsContainer>
   );

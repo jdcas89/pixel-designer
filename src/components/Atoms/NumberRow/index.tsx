@@ -7,20 +7,20 @@ interface NumberRowProps {
   row: RowType;
 }
 const NumberRow: React.FC<NumberRowProps> = ({ row }) => {
-  const { pixelSize } = useContext(BoardContext);
+  const { pixelSize, boardPattern } = useContext(BoardContext);
 
   return (
-    <NumberRowContainer>
+    <NumberRowContainer pixelSize={pixelSize} boardPattern={boardPattern}>
       {row.map((pixel) => (
         <StyledSpan pixelSize={pixelSize} key={pixel.x + pixel.y}>
-          {pixel.x}
+          {pixel.x + 1}
         </StyledSpan>
       ))}
     </NumberRowContainer>
   );
 };
 
-const NumberRowContainer = styled.div`
+const NumberRowContainer = styled.div<{ pixelSize: number; boardPattern: string }>`
   display: flex;
 `;
 

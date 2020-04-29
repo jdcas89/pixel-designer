@@ -1,6 +1,6 @@
 import { RowType } from './grid-example';
 
-export const createGrid: (columns: number, rows: number) => RowType[] = (rows, columns) => {
+export const createGrid: (columns: number, rows: number, gridType?: string) => RowType[] = (rows, columns) => {
   const grid: RowType[] = [];
 
   for (let i = 0; i < rows; i++) {

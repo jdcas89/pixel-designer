@@ -63,7 +63,7 @@ const Box: React.FC<BoxProps> = ({ onPixelClicked, pixel, chosenColor, pixelSize
     >
       <ToolTip>
         <span className="tooltiptext">
-          X: {pixel.x}, Y:{pixel.y}
+          X: {pixel.x + 1}, Y:{pixel.y + 1}
         </span>
       </ToolTip>
     </BoxContainer>
@@ -97,7 +97,7 @@ const BoxContainer = styled.div<{ checked: boolean; color?: string; pixelSize: n
   width: ${({ pixelSize }) => pixelSize}px;
   border: 0.5px solid #00000088;
   margin: 0.5px;
-  border-radius: 2px;
+  border-radius: 8px;
   cursor: pointer;
   background-color: ${({ checked, color }) => (checked ? color : 'white')};
   user-select: none;

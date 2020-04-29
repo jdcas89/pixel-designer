@@ -28,6 +28,7 @@ const Designer = () => {
   }
 
   const [pixelSize, setPixelSize] = useState(savedPixelSize);
+  const [boardPattern, setBoardPattern] = useState('square');
   const [chosenColor, setChosenColor] = useState('#000000');
   const [currentTool, setCurrentTool] = useState<ToolType>('pen');
   const [boardState, setBoardState] = useState<RowType[]>(grid);
@@ -66,21 +67,23 @@ const Designer = () => {
 
   return (
     <DesignerContainer>
-      <BoardContext.Provider value={{ board: boardState, updateBoard, pixelSize }}>
+      <BoardContext.Provider value={{ board: boardState, updateBoard, pixelSize, boardPattern }}>
         <ToolsContext.Provider value={{ currentTool, setCurrentColor: setChosenColor }}>
           <PatternContainer>
             {boardState.map((row, i) => (
               <Fragment key={i}>
                 {i === 0 && <NumberRow row={row} />}
-                <Row key={i} row={row} chosenColor={chosenColor} />
+                <Row index={i} key={i} row={row} chosenColor={chosenColor} />
               </Fragment>
             ))}
           </PatternContainer>
           <EditorTools
+            boardPattern={boardPattern}
             currentTool={currentTool}
             setCurrentTool={setCurrentTool}
             setPixelSize={onPixelSizeChangeHandler}
             createNewBoard={createNewBoardHandler}
+            setBoardPattern={setBoardPattern}
             clearBoard={clearBoardHandler}
             handleChangeColor={handleChangeColor}
             chosenColor={chosenColor}
