@@ -1,0 +1,7 @@
+{
+  "build": {
+    "env": {
+      "FONTAWESOME_TOKEN": "@fontawesome-token"
+    }
+  }
+}
