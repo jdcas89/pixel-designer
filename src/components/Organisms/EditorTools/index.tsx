@@ -36,7 +36,7 @@ const EditorTools: React.FC<EditorToolsProps> = ({
   boardPattern,
 }) => {
   const [savedColorPalette, setSavedColorPalette] = useLocalStorage(
-    'loom-designer-saved-color-palette',
+    'pixel-designer-saved-color-palette',
     JSON.stringify(['#000', '#fff'])
   );
 

@@ -15,11 +15,11 @@ const DEFAULT_COLUMNS = 50;
 
 const Designer = () => {
   const [savedGrid, setSavedGrid] = useLocalStorage(
-    'loom-designer-saved-design',
+    'pixel-designer-saved-design',
     JSON.stringify(createGrid(DEFAULT_ROWS, DEFAULT_COLUMNS))
   );
 
-  const [savedPixelSize, setSavedPixelSize] = useLocalStorage('loom-designer-saved-pixel-size', JSON.stringify(20));
+  const [savedPixelSize, setSavedPixelSize] = useLocalStorage('pixel-designer-saved-pixel-size', JSON.stringify(20));
 
   let grid = JSON.parse(savedGrid);
 
