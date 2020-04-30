@@ -13,7 +13,7 @@ interface BoxProps {
 }
 
 const Box: React.FC<BoxProps> = ({ onPixelClicked, pixel, chosenColor, pixelSize }) => {
-  const { currentTool, setCurrentColor } = useContext(ToolsContext);
+  const { currentTool, setCurrentColor, setCurrentTool } = useContext(ToolsContext);
   const [checkedState, setCheckedState] = useState(pixel.checked);
   const [colorState, setColorState] = useState(pixel.color);
 
@@ -32,8 +32,9 @@ const Box: React.FC<BoxProps> = ({ onPixelClicked, pixel, chosenColor, pixelSize
         color: chosenColor,
       });
     } else if (currentTool === 'eyedropper') {
-      if (setCurrentColor && colorState) {
+      if (setCurrentColor && colorState && setCurrentTool) {
         setCurrentColor(colorState);
+        setCurrentTool('pen');
       }
     } else {
       setColorState('#fff');

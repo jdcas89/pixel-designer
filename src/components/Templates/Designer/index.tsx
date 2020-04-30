@@ -67,8 +67,10 @@ const Designer = () => {
 
   return (
     <DesignerContainer>
-      <BoardContext.Provider value={{ board: boardState, updateBoard, pixelSize, boardPattern }}>
-        <ToolsContext.Provider value={{ currentTool, setCurrentColor: setChosenColor }}>
+      <BoardContext.Provider
+        value={{ board: boardState, updateBoard, pixelSize, boardPattern, setBoard: setBoardState }}
+      >
+        <ToolsContext.Provider value={{ currentTool, setCurrentColor: setChosenColor, setCurrentTool }}>
           <PatternContainer>
             {boardState.map((row, i) => (
               <Fragment key={i}>

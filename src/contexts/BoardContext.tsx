@@ -6,6 +6,7 @@ interface BoardContextProps {
   board?: RowType[];
   pixelSize: number;
   boardPattern: string;
+  setBoard?: (board: RowType[]) => void;
 }
 
 export const BoardContext = React.createContext<BoardContextProps>({ pixelSize: 20, boardPattern: 'square' });

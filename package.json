@@ -38,7 +38,8 @@
     "typescript": "~3.7.2",
     "typography": "^0.16.19",
     "typography-theme-ocean-beach": "^0.16.19",
-    "typography-theme-stow-lake": "^0.16.19"
+    "typography-theme-stow-lake": "^0.16.19",
+    "uniqid": "^5.2.0"
   },
   "devDependencies": {
     "eslint": "^6.8.0",

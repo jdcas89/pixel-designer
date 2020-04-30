@@ -1,10 +1,12 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { faCaretCircleRight, faEraser, faPen } from '@fortawesome/pro-solid-svg-icons';
 import { ColorChangeHandler, ColorResult, SketchPicker } from 'react-color';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useLocalStorage from '../../../utils/useLocalStorage';
 import { faEyeDropper } from '@fortawesome/pro-light-svg-icons';
+import { BoardContext } from '../../../contexts/BoardContext';
+import uniqueId from 'uniqid';
 
 export type ToolType = 'eraser' | 'pen' | 'eyedropper';
 
@@ -35,10 +37,38 @@ const EditorTools: React.FC<EditorToolsProps> = ({
   setBoardPattern,
   boardPattern,
 }) => {
+  const { board, setBoard } = useContext(BoardContext);
   const [savedColorPalette, setSavedColorPalette] = useLocalStorage(
     'pixel-designer-saved-color-palette',
     JSON.stringify(['#000', '#fff'])
   );
+
+  const download = (content, fileName, contentType) => {
+    const anchorElement = document.createElement('a');
+
+    const file = new Blob([content], { type: contentType });
+
+    anchorElement.href = URL.createObjectURL(file);
+    anchorElement.download = fileName;
+    anchorElement.click();
+  };
+
+  const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let files = event.target.files;
+    if (files && files.length > 0) {
+      let file = files[0];
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        if (e && e.target && e.target.result && typeof e.target.result === 'string') {
+          const importedBoard = JSON.parse(e.target.result);
+          if (importedBoard && setBoard) {
+            setBoard(importedBoard);
+          }
+        }
+      };
+      reader.readAsText(file);
+    }
+  };
 
   const [colorPalette, setColorPalette] = useState(JSON.parse(savedColorPalette));
   return (
@@ -77,33 +107,33 @@ const EditorTools: React.FC<EditorToolsProps> = ({
       />
       <Text>Color settings</Text>
       <ButtonsContainer>
-        <ClearBoardButton
+        <Button
           onClick={() => {
             setColorPalette((prevState) => [...prevState, chosenColor]);
           }}
         >
           Save color
-        </ClearBoardButton>
-        <ClearBoardButton
+        </Button>
+        <Button
           onClick={() => {
             setSavedColorPalette(JSON.stringify(colorPalette));
           }}
         >
           Save palette
-        </ClearBoardButton>
-        <ClearBoardButton
+        </Button>
+        <Button
           onClick={() => {
             setColorPalette(['#000', '#fff']);
             setSavedColorPalette(JSON.stringify(['#000', '#fff']));
           }}
         >
           Clear palette
-        </ClearBoardButton>
+        </Button>
       </ButtonsContainer>
 
       <Text>Board settings</Text>
       <ButtonsContainer>
-        <ClearBoardButton
+        <Button
           onClick={() => {
             const result = window.confirm('Do you really want to clear the board?');
             if (result) {
@@ -112,9 +142,9 @@ const EditorTools: React.FC<EditorToolsProps> = ({
           }}
         >
           Clear board
-        </ClearBoardButton>
+        </Button>
 
-        <ClearBoardButton
+        <Button
           onClick={() => {
             const result = window.prompt('Please enter your pixel size', '20');
             if (result) {
@@ -124,8 +154,8 @@ const EditorTools: React.FC<EditorToolsProps> = ({
           }}
         >
           Pixel Size
-        </ClearBoardButton>
-        <ClearBoardButton
+        </Button>
+        <Button
           onClick={() => {
             const result = window.prompt('Please enter your grid size', '9,50');
             if (result) {
@@ -136,21 +166,48 @@ const EditorTools: React.FC<EditorToolsProps> = ({
           }}
         >
           Grid size
-        </ClearBoardButton>
+        </Button>
       </ButtonsContainer>
 
       <Text>Board Pattern</Text>
-      <ClearBoardButton
+      <Button
         onClick={() => {
           setBoardPattern(boardPattern === 'square' ? 'peyote' : 'square');
         }}
       >
         {boardPattern === 'square' ? 'Peyote' : 'Square'}
-      </ClearBoardButton>
+      </Button>
+
+      <br />
+      <Button
+        onClick={() => {
+          download(JSON.stringify(board), `pixel-designer-${uniqueId()}.json`, 'text/plain');
+        }}
+      >
+        Export design
+      </Button>
+      <br />
+      <Button
+        onClick={() => {
+          const uploadInput = document.getElementById('uploadFile');
+          if (uploadInput) {
+            uploadInput.click();
+          }
+        }}
+      >
+        Import design
+      </Button>
+      <br />
+      <StyledUploadInput type="file" id="uploadFile" onChange={onChangeHandler} />
+
       <Version>Version 0.1.0</Version>
     </EditorToolsContainer>
   );
 };
+
+const StyledUploadInput = styled.input`
+  display: none;
+`;
 
 const Version = styled.p`
   margin: 32px 0;
@@ -171,7 +228,7 @@ const ButtonsContainer = styled.div`
   grid-gap: 8px;
   grid-template-columns: 1fr 1fr;
 `;
-const ClearBoardButton = styled.button`
+const Button = styled.button`
   margin: 0 auto;
   width: 100%;
   height: 40px;
