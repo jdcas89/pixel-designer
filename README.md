@@ -3,10 +3,10 @@
 
 WIP: Pixel designer app
 
-- [ ] create pixel desing
-- [ ] Uses localstorage to save design
-- [ ] paint, erase and eyedropper tools
-- [ ] import and export json files for designs
-- [ ] Two patterns: square and peyote
-- [ ] Set board size and pixel size
-- [ ] Save color palettes
+- [x] create pixel desing
+- [x] Uses localstorage to save design
+- [x] paint, erase and eyedropper tools
+- [x] import and export json files for designs
+- [x] Two patterns: square and peyote
+- [x] Set board size and pixel size
+- [x] Save color palettes
